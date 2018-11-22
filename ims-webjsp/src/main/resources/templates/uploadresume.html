@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>上传简历</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link href="css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css?v=3.0.0" rel="stylesheet">
+    <link href="css/new.css" rel="stylesheet"/>
+
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-9 animated fadeInRight new_col-sm-9">
+
+            <div class="mail-box">
+                <div>
+                    <form method="POST" enctype="multipart/form-data" action="/upload">
+                        <table>
+                            <tr>
+                                <td height="60px" style="line-height: 100px;">姓名：</td>
+                                <td><input id="name" name="name" class="form-control" type="text"></td>
+                            </tr>
+                            <tr>
+                                <td height="100px" style="line-height: 100px;">上传简历:</td>
+                                <td><input type="file" name="file"/></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><font color="red">*</font>文件格式只允许为.doc,.docx,.pdf</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" value="Upload"/></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 全局js -->
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js?v=3.4.0"></script>
+<script th:inline="javascript">
+    var message = [[${message}]];
+    if (message == '0') {
+        alert("上传成功")
+    }
+    if (message == '1') {
+        alert("上传失败")
+    }
+    if (message == '2') {
+        alert("上传文件格式错误")
+    }
+    if (message == '3') {
+        alert("上传文件大小超过限制大小")
+    }
+</script>
+
+
+<!-- 自定义js -->
+<script src="js/content.min.js?v=1.0.0"></script>
+
+
+<!-- iCheck -->
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+</script>
+
+
+<!--统计代码，可删除-->
+
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ims.ims.demo.dao.UserDao">
+
+    <!-- 登录功能 -->
+    <select id="login" parameterType="java.lang.String" resultMap="loginResultMap">
+        SELECT id,username,password,power,create_time,update_time FROM ims_tr_userinfo WHERE username=#{username};
+    </select>
+    <resultMap type="userInfo" id="loginResultMap">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="power" column="power"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 注册功能 -->
+    <select id="register" parameterType="cn.ims.ims.demo.entity.po.UserInfo">
+        INSERT INTO userinfo(username,`password`) VALUES(#{username},#{password})
+    </select>
+
+    <!--超级管理员功能-->
+    <select id="findAllUser" resultType="UserInfo">
+  	select `id`,`username`,`password`,`power` from `ims_tr_userinfo`
+  </select>
+
+    <select id="findUserById" parameterType="Integer" resultType="UserInfo" >
+  	select `id`,`username`,`password`,`power` from `ims_tr_userinfo` where `id`=#{id}
+  </select>
+
+    <delete id="deleteUserById" parameterType="Integer">
+  	delete from `ims_tr_userinfo` where `id`=#{value}
+  </delete>
+
+    <insert id="addUser" parameterType="UserInfo">
+  	insert into `ims_tr_userinfo` (`id`,`username`,`password`,`power`,`create_time`,`update_time`) values(#{id},#{username},#{password},#{power},#{create_time},#{update_time})
+  </insert>
+
+    <update id="updateUser" parameterType="UserInfo" >
+  	update `ims_tr_userinfo` set `username`=#{username},`password`=#{password},`power`=#{power},`update_time`=#{update_time}
+  				  where `id`=#{id}
+  </update>
+
+</mapper>

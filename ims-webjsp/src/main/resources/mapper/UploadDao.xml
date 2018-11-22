@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ims.ims.demo.dao.UploadDao">
+
+    <!-- 增加面试简历 -->
+    <insert id="insertresume" parameterType="cn.ims.ims.demo.entity.po.Interview" >
+        INSERT into ims_tr_interview(name,resume_path) VALUE(#{name},#{resume_path})
+    </insert>
+
+</mapper>

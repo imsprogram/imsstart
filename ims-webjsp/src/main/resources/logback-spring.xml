@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+
+    <contextName>erp-service</contextName>
+    <property name="file_path" value="/opt/www/logs/erp-service"/>
+    <property name="date_pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+    <property name="max_history" value="66"/>
+    <property name="file_size" value="50MB"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} -
+                %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APP"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${file_path}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${file_path}/app.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxHistory>${max_history}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${file_size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${date_pattern}</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="DUBBO"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${file_path}/dubbo.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${file_path}/dubbo.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxHistory>${max_history}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${file_size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${date_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SQL"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${file_path}/sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${file_path}/sql.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <maxHistory>${max_history}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${file_size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>${date_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework">
+        <level value="WARN"/>
+    </logger>
+    <logger name="org.apache">
+        <level value="WARN"/>
+    </logger>
+    <logger name="org.mybatis">
+        <level value="WARN"/>
+    </logger>
+
+    <logger name="com.alibaba.dubbo" level="WARN" additivity="false">
+        <appender-ref ref="DUBBO"/>
+    </logger>
+
+    <!-- 以下是mapper的sql配置,不同项目放自己的dao包名 -->
+    <logger name="cn.ims.ims.demo.dao.ImsDemoDao" level="DEBUG"
+            additivity="false">
+        <appender-ref ref="SQL"/>
+    </logger>
+    <!-- sql配置结束 -->
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="APP"/>
+        <!-- 下面这个上线要注释掉 -->
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>  

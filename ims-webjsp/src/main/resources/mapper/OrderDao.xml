@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ims.ims.demo.dao.OrderDao">
+
+    <!-- 预约 -->
+    <insert id="order" parameterType="cn.ims.ims.demo.entity.po.OrderInfo">
+        insert into ims_tr_orderinfo(order_status,order_time,order_username,order_resume) VALUES(1,#{order_time},#{order_username},#{interview_id})
+    </insert>
+    <!-- 取消预约 -->
+    <insert id="cancelOrder" parameterType="long">
+        update ims_tr_orderinfo set order_status=2 where id=#{id}
+    </insert>
+    <!--查询所有预约-->
+    <select id="selectOrder" resultType="cn.ims.ims.demo.entity.po.OrderInfo">
+        select * from ims_tr_orderinfo where order_status=#{order_status}
+    </select>
+</mapper>

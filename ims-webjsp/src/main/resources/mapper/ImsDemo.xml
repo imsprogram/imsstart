@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ims.ims.demo.dao.ImsDemoDao">
+	<!-- 字段 备注 说明
+		id			主键id
+		createBy			创建人
+		createOn			创建时间
+		updateBy			updateBy
+		updateOn			修改时间
+		isDel			isDel
+	-->
+
+	<sql id="table">
+		ims_demo
+	</sql>
+	
+	<sql id="BaseColumnList">
+		id,
+		createBy,
+		createOn,
+		updateBy,
+		updateOn,
+		isDel
+	</sql>
+
+	<resultMap id="BaseResultMap" type="cn.ims.ims.demo.entity.vo.ImsDemoVo" >
+		<id column="id" property="id" />
+		<result column="createBy" property="createBy" />
+		<result column="createOn" property="createOn" />
+		<result column="updateBy" property="updateBy" />
+		<result column="updateOn" property="updateOn" />
+		<result column="isDel" property="isDel" />
+	</resultMap>
+	
+	<sql id="findBywhere">
+	    <where>
+			<if test="id != null">
+				and id= #{id,jdbcType=BIGINT }
+			</if>
+			<if test="createBy != null">
+				and createBy= #{createBy,jdbcType=BIGINT }
+			</if>
+			<if test="createOn != null">
+				and createOn= #{createOn,jdbcType=TIMESTAMP }
+			</if>
+			<if test="updateBy != null">
+				and updateBy= #{updateBy,jdbcType=BIGINT }
+			</if>
+			<if test="updateOn != null">
+				and updateOn= #{updateOn,jdbcType=TIMESTAMP }
+			</if>
+			<if test="isDel != null">
+				and isDel= #{isDel,jdbcType=TINYINT }
+			</if>
+		</where>
+	</sql>
+
+	<!-- 统计总数 -->
+	<select id="count" resultType="Integer">
+		SELECT 
+			count(1) 
+		FROM  
+			<include refid="table" />
+		<include refid="findBywhere"/>
+	</select>
+	
+	<!-- 查询列表,可分页 -->
+	<select id="list" resultMap="BaseResultMap">
+		SELECT 
+			<include refid="BaseColumnList"/> 
+		FROM  
+			<include refid="table" />
+		<include refid="findBywhere"/>
+		ORDER BY 
+			updateOn DESC
+		<if test="usePage == 1">
+			LIMIT #{start} , #{pageSize}
+		</if>
+	</select>
+	
+	<!-- 查询单条 -->
+	<select id="get" parameterType="cn.ims.ims.demo.entity.vo.ImsDemoVo" resultMap="BaseResultMap" >
+		SELECT 
+			<include refid="BaseColumnList"/> 
+		FROM 
+			<include refid="table" />
+		<include refid="findBywhere"/>
+		LIMIT 0,1
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="cn.ims.ims.demo.entity.vo.ImsDemoVo">
+		INSERT INTO 
+			<include refid="table" />
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				id,
+			</if>
+			<if test="createBy != null">
+				createBy,
+			</if>
+			<if test="createOn != null">
+				createOn,
+			</if>
+			<if test="updateBy != null">
+				updateBy,
+			</if>
+			<if test="updateOn != null">
+				updateOn,
+			</if>
+			<if test="isDel != null">
+				isDel
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				#{id,jdbcType=BIGINT },
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT },
+			</if>
+			<if test="createOn != null">
+				#{createOn,jdbcType=TIMESTAMP },
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT },
+			</if>
+			<if test="updateOn != null">
+				#{updateOn,jdbcType=TIMESTAMP },
+			</if>
+			<if test="isDel != null">
+				#{isDel,jdbcType=TINYINT }
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="cn.ims.ims.demo.entity.vo.ImsDemoVo">
+		UPDATE 
+			<include refid="table" />
+		<set>
+			<if test="createBy != null">
+				createBy = #{createBy,jdbcType=BIGINT },
+			</if>
+			<if test="createOn != null">
+				createOn = #{createOn,jdbcType=TIMESTAMP },
+			</if>
+			<if test="updateBy != null">
+				updateBy = #{updateBy,jdbcType=BIGINT },
+			</if>
+			<if test="updateOn != null">
+				updateOn = #{updateOn,jdbcType=TIMESTAMP },
+			</if>
+			<if test="isDel != null">
+				isDel = #{isDel,jdbcType=TINYINT }
+			</if>
+		</set>
+		WHERE
+			id = #{id,jdbcType=BIGINT }
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="cn.ims.ims.demo.entity.vo.ImsDemoVo" >
+		DELETE 
+		FROM 
+			<include refid="table" />
+		WHERE 
+			id = #{id}
+	</delete>
+</mapper>

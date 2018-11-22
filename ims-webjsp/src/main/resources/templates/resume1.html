@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>简历箱</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link href="css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css?v=3.0.0" rel="stylesheet">
+    <link href="css/new.css" rel="stylesheet" />
+
+    <!-- 全局js -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!--下载-->
+    <script type="text/javascript">
+
+        function download11(resumepath) {
+            var string1 = resumepath;
+            string1 = encodeURI(encodeURI(string1));//将中文进行编码
+            location.href = "/download?resumename="+string1;
+            /*document.getElementById('form1').submit();*/
+        }
+    </script>
+
+    <!--Tec通过-->
+    <script type="text/javascript">
+        function passByTec(id) {
+            var id1 = id;
+            $.ajax({
+                url:"/passInterviewByTec?id="+id1,
+                type:"POST",
+                success:function(data){
+                    alert(data)
+                }
+            });
+        }
+    </script>
+
+    <!--Tec删除-->
+    <script type="text/javascript">
+        function delByTec(iid,obj) {
+            var id1 = iid;
+            var td=obj;
+            $.ajax({
+                url:"/deleteInterviewByTec?id="+id1,
+                type:"POST",
+                success:function(data){
+                    alert(data)
+                    $(td).parent().parent().remove()
+                }
+            });
+        }
+    </script>
+
+
+
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-9 animated fadeInRight new_col-sm-9">
+            <div class="mail-box-header">
+
+                <form id="form1" method="post" class="pull-right mail-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" name="search" placeholder="搜索简历">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                搜索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <h2>
+
+                    <p th:if="${k} eq 1" >未查看</p>
+
+                    <p th:if="${k} eq 2" >已通过</p>
+                    <p th:if="${k} eq 3" >未通过</p>
+                </h2>
+                <div class="mail-tools tooltip-demo m-t-md">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="刷新邮件列表"><i class="fa fa-refresh"></i> 刷新</button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="标为已读"><i class="fa fa-eye"></i>
+                    </button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="标为通过"><i class="fa fa-exclamation"></i>
+                    </button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="标为未通过"><i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mail-box" th:if="${not #lists.isEmpty(list)}">
+
+                <table class="table table-hover table-mail" >
+                    <tbody>
+                    <tr class="read" th:each="i1:${list}">
+                        <td class="check-mail">
+                            <input type="checkbox" class="i-checks">
+                        </td>
+                        <td class="mail-ontact " th:text="${i1.name}"><a href="resume_detail.html"></a>
+                        </td>
+                        <td class="mail-subject new_mail-subject" >
+                            <span class="label label-danger"><a href="resume_detail.html">备注</a></span>
+                            <a  th:if="${i1.note!=null and i1.note!=''}" th:text="${i1.note}" >备注</a>
+                        </td>
+                        <td class=""><a th:onclick="'javascript:download11(\''+${i1.resume_path}+'\')'"><i class="fa fa-paperclip"></i></a>
+                        </td>
+                        <td class="text-right mail-date" th:if="${k} eq 1 or ${k} eq 3">
+                            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" th:onclick="'javascript:passByTec(\''+${i1.id}+'\')'">通过
+                            </button>
+                        </td>
+                        <td class="text-right mail-date" th:if="${k} eq 2">
+                            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button"  data-toggle="modal" data-target="#myModal">预约
+                            </button>
+                            <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content animated bounceInRight">
+                                        <div class="modal-body " style="height: 300px;">
+                                            <form id="myform" >
+                                                <div class="form-group">
+                                                    <label>Email</label>
+                                                    <input type="hidden" name="interview_id" th:value="${i1.id}">
+                                                    <input type="hidden" name="order_username" th:value="${i1.name}">
+                                                    <input type="email" name="order_email" placeholder="请输入您的Email" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>预约时间</label> </br>
+                                                    <input name="order_time" class="form-control layer-date" placeholder="YYYY-MM-DD hh:mm:ss" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                                                    <label class="laydate-icon"></label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                            <button type="submit" class="btn btn-primary" th:onclick="'javascript:order()'">发送邀请</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right mail-date" th:if="${k} eq 3 or ${k} eq 1 or ${k} eq 2">
+                            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" th:onclick="'javascript:delByTec(\''+${i1.id}+'\',this)'">删除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 自定义js -->
+<script src="js/content.min.js?v=1.0.0"></script>
+
+
+<!-- iCheck -->
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+</script>
+
+<!-- layerDate plugin javascript -->
+<script src="js/plugins/layer/laydate/laydate.js"></script>
+
+
+</body>
+
+</html>

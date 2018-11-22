@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ims.ims.demo.dao.InterviewDao">
+
+    <!-- 查询简历 -->
+    <select id="selectInterview0" parameterType="String" resultType="cn.ims.ims.demo.entity.po.Interview">
+        select * from ims_tr_resumeinfo where status=#{id}
+    </select>
+
+    <!--hr通过简历-->
+    <update id="passInterviewByHr" parameterType="long">
+        UPDATE ims_tr_resumeinfo SET `status`=1 where id=#{id}
+    </update>
+
+    <!--hr删除简历-->
+    <update id="deleteInterviewByHr" parameterType="long">
+        UPDATE ims_tr_resumeinfo SET `status`=3 where id=#{id}
+    </update>
+
+    <!--hr增加备注-->
+    <update id="insertNote" parameterType="cn.ims.ims.demo.entity.po.Interview">
+        update ims_tr_resumeinfo SET `note`=#{note} where id=#{id}
+    </update>
+
+    <!-- Tec查询未查看简历 -->
+    <select id="selectInterviewByTec" parameterType="int" resultType="cn.ims.ims.demo.entity.po.Interview">
+        select * from ims_tr_resumeinfo where status=#{id}
+    </select>
+
+    <!--tec通过简历-->
+    <update id="passInterviewByTec" parameterType="long">
+        UPDATE ims_tr_resumeinfo SET `status`=2 where id=#{id}
+    </update>
+
+    <!--tec删除简历-->
+    <update id="deleteInterviewByTec" parameterType="long">
+        UPDATE ims_tr_resumeinfo SET `status`=3 where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,151 @@
+ <!DOCTYPE html>
+ <html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>用户管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link href="../css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="../css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="../css/plugins/footable/footable.core.css" rel="stylesheet">
+    <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css?v=3.0.0" rel="stylesheet">
+    <link href="../css/new.css" rel="stylesheet">
+
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+            
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户管理</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-5 m-b-xs">
+                                <select class="input-sm form-control input-s-sm inline">
+                                    <option value="0">请选择</option>
+                                    <option value="1">人力资源</option>
+                                    <option value="2">技术总监</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div data-toggle="buttons" class="btn-group">
+                                    <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-primary"> 查询</button> </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <input type="text" placeholder="请输入关键词" class="input-sm form-control"> <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-primary"> 搜索</button> </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                        <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>职位</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="user" th:each="userlist:${userList}">
+                                    <td th:hidden="${userlist.getId()}"></td>
+                                    <td th:text="${userlist.getUsername()}"></td>
+                                    <td>
+
+                                        <div th:switch="${userlist.getPower()}">
+                                            <p th:case="1">人力资源</p>
+                                            <p th:case="2">技术面试官</p>
+                                            <p th:case="3">管理员</p>
+                                        </div>
+
+
+                                    </td>
+                                    <td>
+                                    	<a href="/insertuser"><i class="fa fa-plus text-navy"></i></a>&nbsp;&nbsp;
+                                        <a th:href="'/updateUser?id='+${userlist.getId()}"><i class="fa fa-edit text-navy"></i></a>&nbsp;&nbsp;
+                                        <a th:href="'/delete?id='+${userlist.getId()}"><i class="fa fa-times text-navy"></i></a>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                        <tr>
+                                            <td colspan="3">
+                                                <ul class="pagination pull-right"></ul>
+                                            </td>
+                                        </tr>
+                            </tfoot>
+                        </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="../js/jquery-2.1.1.min.js"></script>
+    <script src="../js/bootstrap.min.js?v=3.4.0"></script>
+    <script src="../js/plugins/footable/footable.all.min.js"></script>
+
+
+
+
+    <!-- Peity -->
+    <script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="../js/content.min.js?v=1.0.0"></script>
+
+
+    <!-- iCheck -->
+    <script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- Peity -->
+    <script src="../js/demo/peity-demo.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+
+
+	
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+
+    </script>
+    <!--统计代码，可删除-->
+
+</body>
+
+</html>
